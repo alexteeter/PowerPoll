@@ -1,12 +1,12 @@
 # PowerPoll 2020
-PowerPoll 2020 is a simple pyhton script that downloads league data using ESPN's Fantasy League API, in turn by using [cwendt94's ff-espn-api tools](https://github.com/cwendt94/ff-espn-api).
+PowerPoll 2020 is a simple python script that downloads league data using ESPN's Fantasy League API, in turn by using [cwendt94's ff-espn-api tools](https://github.com/cwendt94/ff-espn-api).
 ##  Installation
 ### Before You Download
 Script requires Python 3 or higher in order to run (available from the [Python site](https://www.python.org/downloads/) or the Microsoft Store).
 
 ### Download
 The latest release can be found [here](https://github.com/alexteeter/PowerPoll/releases).
-After installing Pyhton, extract the PowerPoll files into any directory of your choosing (making a seperate directory for each year will make the output files much simpler to sift through).
+After installing Python, extract the PowerPoll files into any directory of your choosing (making a separate directory for each year will make the output files much simpler to sift through).
 
 Then, run *install.bat*, this installs the python libraries needed for operation. This only needs to run once.
 ### Important

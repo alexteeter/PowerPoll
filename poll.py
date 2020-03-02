@@ -6,14 +6,13 @@ import json
 import properties
 import pyfiglet
 
-def main():
+
+
+def main(): 
     printHeader()
     checkNet()
     league = openLeague()
     week = getWeek()
-    
-    lastWeek = 0 ##last weeks poll points, will be gotten from file
-    pollScore = 0 ## current week pollscore, written to file
     pollList = []
     scoreList = {}
     
@@ -22,24 +21,23 @@ def main():
         matchScore = team.scores[int(week)]
         if properties.debug:
             print('TeamID: ' + str(team.team_id))
-        print("\n" + str(team.team_name) + "\n" +\
+        print(str(team.team_name) + "\n" +\
               str(team.wins) + " Wins\n" +\
               str(team.losses) + " Losses\n" +\
               str(matchScore) + " Match Score\n")
         onlinePoll = getOnlinePoll()
         print('-')
-        pollScore = (round((lastWeek*.5)+int(onlinePoll)*2+matchScore+((team.wins-team.losses)*10),2))
+        pollScore = (round((lastWeek*.5)+(int(onlinePoll)*properties.pollMultiplier)+matchScore+((team.wins-team.losses)*10),2))
         if properties.debug:
             print('pollScore = ' + str(pollScore) + '\n-----\n')
         pollList.append((pollScore, team.team_id))
         scoreList[team.team_id] = pollScore
     writeScores(scoreList, week)
     pollList.sort(reverse=True)
-    printList(pollList, league)
-
+    printList(pollList, league, week)
 
 def writeScores(scoreList, week):
-    with open('week' + str(week) + '.txt', 'w') as json_file:
+    with open('week' + str(week) + '.json', 'w') as json_file:
         json.dump(scoreList, json_file)
 
 def readScore(teamID, week):
@@ -47,7 +45,7 @@ def readScore(teamID, week):
         return 0
     else:
         try:
-            with open('week' + str(int(week)-1) + '.txt') as j:
+            with open('week' + str(int(week)-1) + '.json') as j:
                 data = json.load(j)
                 score = data[str(teamID)]
             if properties.debug:
@@ -85,9 +83,10 @@ def openLeague():
     except:
         exceptCont('')
 
-def printList(list, league):
+def printList(list, league, week):
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
     rank = 0
+    f = open('PowerPollWeek'+str(week)+'.txt', 'wb')
     for pair in list:
         rank += 1
         i = 0
@@ -95,7 +94,10 @@ def printList(list, league):
         for x in pair:
             if i == 1:
                 team = League.get_team_data(league, x)
-                print(line + team.team_name + " " + str(pair[i-1]))
+                line = line + team.team_name + " " + str(pair[i-1])
+                f.write(line.encode('utf8'))
+                f.write('\n'.encode())
+                print(line)
             i += 1
 
 def getWeek():
@@ -112,9 +114,12 @@ def getOnlinePoll():
     try:
         int(onlinePoll)
     except:
-        print('Invalid Poll Score: \"' + str(onlinePoll) + '\" is not a number!' +\
-            '\nExiting Program...')
-        exit()
+        print('Invalid Poll Score: \"' + str(onlinePoll) + '\" is not a number!')
+        cont = input('Try again? (y/n):')
+        if cont == 'y':
+            getOnlinePoll()
+        else:
+            exit()
     return onlinePoll
 
 def exceptCont(message):
@@ -128,5 +133,5 @@ def exceptCont(message):
 
 def printHeader():
     print(pyfiglet.figlet_format("PowerPoll 2020"))
-
+    
 main()

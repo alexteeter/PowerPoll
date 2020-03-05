@@ -6,7 +6,7 @@ Script requires Python 3 or higher in order to run (available from the [Python s
 
 ### Download
 The latest release can be found [here](https://github.com/alexteeter/PowerPoll/releases).
-After installing Python, extract the PowerPoll files into any directory of your choosing (making a separate directory for each year will make the output files much simpler to sift through).
+After installing Python, extract the PowerPoll files into any directory of your choosing. The script will make seperate directories for each season (so long as you update the properties file!).
 
 Then, run *install.bat*, this installs the python libraries needed for operation. This only needs to run once.
 ### Important
@@ -17,12 +17,14 @@ League ID can be found in the URL of your league:
 
 ## Usage
 
-To run the Poll, open PowerPoll.bat.
+To run the Poll, open PowerPoll.pyw.
 
 If the league is private, it will ask for the username/email you use for your ESPN Fantasy league, as well as the password. (If the league is public, this step is skipped).
 
 Enter in the current week of play (the first week starts at 0). Then, for each team in the league, enter in the score gotten from however you choose to take ballots. (I use Survey Monkey's rank surveys for this).
 
 After all scores are entered, the script will then calculate the Poll Score for each team, before generating a ranked list of teams. The Poll Score accounts previous weeks' Poll Scores, as well as Wins vs. Losses for the season and points scored in a match.
-Results are also output as a python dict in *weekx.txt*.
+Results are also output as a text file for easy copy/pasting.
+
+To run the script with console output, open PowerPoll.bat instead.
 

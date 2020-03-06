@@ -207,7 +207,7 @@ def getWeek():
         int(week)
     except:
         sg.PopupError('\'' + week + '\' is not a valid Week Number!')
-        getWeek()
+        week = getWeek()
     return week
     
 def getOnlinePoll():

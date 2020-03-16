@@ -126,7 +126,7 @@ def openLeague():
                     league = None
                     sg.PopupError('League Failed to Load!')
                     window.close()
-                    main()
+                    league = openLeague()
                 sg.PopupAutoClose('League Loaded!')
                 break
         window.close()
@@ -208,7 +208,24 @@ def getWeek():
     except:
         sg.PopupError('\'' + week + '\' is not a valid Week Number!')
         week = getWeek()
-    return week
+    if os.path.exists(str(path) + '/' + str(properties.year) + '/json/week' + str(week) + '.json'):
+            layout = [[sg.Text('A Poll for Week ' + str(week) + ' already exisits! \nOverwrite?')],
+                      [sg.Button('Overwrite', bind_return_key=True), sg.Button('Cancel')]]
+            window = sg.Window('Overwrite Poll?', layout)
+            while True:
+                event, values = window.read()
+                if event is None:
+                    quit()
+                    break
+                if event == 'Overwrite':
+                    return week
+                    break
+                if event == 'Cancel':
+                    quit()
+                    break
+            window.close()  
+    else:
+        return week
     
 def getOnlinePoll():
     onlinePoll = input("\nOnline Poll Score: ")

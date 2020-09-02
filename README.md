@@ -1,5 +1,6 @@
 # PowerPoll 2020
 PowerPoll 2020 is a simple python script that downloads league data using ESPN's Fantasy League API, in turn by using [cwendt94's ff-espn-api tools](https://github.com/cwendt94/ff-espn-api).
+### NOTE: Username/Password Login is currently broken due to change on ESPN's side. Please use SWID/espn_s2 values to login!
 ##  Installation
 ### Before You Download
 Script requires Python 3 or higher in order to run (available from the [Python site](https://www.python.org/downloads/) or the Microsoft Store).

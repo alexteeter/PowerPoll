@@ -102,34 +102,44 @@ def openLeague():
         sg.PopupError('Please Change League ID in properties.py File!')
         quit()
     if properties.private:
-        display = 'Enter Your Login Information (ESPN Account)'
-
-        layout = [[sg.Text(display,key='-DISPLAY-'), sg.Text(size=(15,1), key='-OUTPUT-')],
-                  [sg.Input(key='user')],
-                  [sg.Text('Password'), sg.Text(size=(15,1))],
-                  [sg.Input(key='pass', password_char='*')],
-                  [sg.Button('OK', bind_return_key=True)]]
-        
-        window = sg.Window('PowerPoll 2020', layout)
-        
-        while True:  # Event Loop
-            event, values = window.read()
-            if event is  (None):
-                quit()
-                break
-            if event == 'OK':
-                sg.PopupAutoClose('Loading League...', non_blocking=True)
-                try:
-                    league = League(properties.league, properties.year, username=values['user'], password=values['pass'])
-                    test = league.get_team_data(league)
-                except:
-                    league = None
-                    sg.PopupError('League Failed to Load!')
-                    window.close()
-                    league = openLeague()
+        if properties.useSWID == False:
+            display = 'Enter Your Login Information (ESPN Account)'
+    
+            layout = [[sg.Text(display,key='-DISPLAY-'), sg.Text(size=(15,1), key='-OUTPUT-')],
+                    [sg.Input(key='user')],
+                    [sg.Text('Password'), sg.Text(size=(15,1))],
+                    [sg.Input(key='pass', password_char='*')],
+                    [sg.Button('OK', bind_return_key=True)]]
+            
+            window = sg.Window('PowerPoll 2020', layout)
+            
+            while True:  # Event Loop
+                event, values = window.read()
+                if event is  (None):
+                    quit()
+                    break
+                if event == 'OK':
+                    sg.PopupAutoClose('Loading League...', non_blocking=True)
+                    try:
+                        league = League(properties.league, properties.year, username=values['user'], password=values['pass'])
+                        test = league.get_team_data(league)
+                    except:
+                        league = None
+                        sg.PopupError('League Failed to Load!')
+                        window.close()
+                        league = openLeague()
+                    sg.PopupAutoClose('League Loaded!')
+                    break
+            window.close()
+        else:
+            sg.PopupAutoClose('Loading League...', non_blocking=True)
+            try:
+                league = League(properties.league, properties.year, espn_s2=properties.espn_s2, swid=properties.swid)
                 sg.PopupAutoClose('League Loaded!')
-                break
-        window.close()
+            except:
+                league = None
+                sg.PopupError('League Failed to Load!\nCheck espn_s2 or SWID values.')
+                window.close()
     else:
         sg.PopupAutoClose('Loading League...', non_blocking=True)
         league = League(properties.league, properties.year)

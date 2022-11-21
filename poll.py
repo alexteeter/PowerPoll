@@ -40,6 +40,7 @@ def main():
     window.close() 
     for team in league.teams:
         lastWeek = readScore(team.team_id)
+        lastRank = getLastRank(team.team_name)
         matchScore = team.scores[int(week)]
         onlinePoll = values[team.team_id]
         try:
@@ -81,6 +82,25 @@ def readScore(teamID):
         except:
             sg.PopupError('Failure!\nUnable to open Last Week scores.\nIs week number valid?')
             print('Unable to open Last Week scores. Is week number valid?')
+            exit()
+
+def getLastRank(team_name):
+    if int(week) == 0:
+        return 0
+    else:
+        filename = str(path) + '/' + str(properties.year) + '/Polls/week' + str(int(week)-1) + '.txt'
+        try:
+            with open(filename) as f:
+                lines = f.readlines()
+                for line in lines:
+                    if line.find(team_name) != -1:
+                        rank = line.split(')')[0]
+            if properties.debug:
+                print('\nlast week rank: ' + rank)
+            return rank
+        except:
+            sg.PopupError('Failure!\nUnable to open Last Week rankings.\nIs week number valid?')
+            print('Unable to open Last Week rankings. Is week number valid?')
             exit()
 
 def checkNet():
@@ -148,7 +168,6 @@ def openLeague():
     printHeader()
     print('League loaded!\n-------------------------------\n\n')
     return league
-
 def printList(list, league):
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
     rank = 0   
@@ -167,7 +186,10 @@ def printList(list, league):
         for x in pair:
             if i == 1:
                 team = League.get_team_data(league, x)
-                line = line + team.team_name + " " + str(pair[i-1])
+                if properties.debug:
+                    line = line + team.team_name + " " + str(pair[i-1]) + " Prev.: " + str(getLastRank(team.team_name))
+                else:
+                    line = line + team.team_name + " -  Prev: " + str(getLastRank(team.team_name))
                 f.write(line.encode('utf8'))
                 f.write('\n'.encode())
                 print(line)
@@ -262,4 +284,4 @@ def exceptCont(message):
 def printHeader():
     print(pyfiglet.figlet_format("PowerPoll 2020"))
 
-main()
+#main()

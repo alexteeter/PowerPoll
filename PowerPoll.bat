@@ -1,3 +1,3 @@
 @echo off
-python poll.py
+python main.py
 pause
